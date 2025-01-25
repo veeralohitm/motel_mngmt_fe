@@ -1,22 +1,22 @@
 const data = [
   {
     id: 1,
-    name: "Jeans",
+    name: "King Sized Rooms",
     percentValues: 70,
   },
   {
     id: 2,
-    name: "Shirts",
+    name: "Single Rooms",
     percentValues: 40,
   },
   {
     id: 3,
-    name: "Belts",
+    name: "Double bed rooms",
     percentValues: 60,
   },
   {
     id: 4,
-    name: "Caps",
+    name: "King Sized two bed rooms",
     percentValues: 80,
   },
   {
@@ -30,7 +30,7 @@ const AreaProgressChart = () => {
   return (
     <div className="progress-bar">
       <div className="progress-bar-info">
-        <h4 className="progress-bar-title">Most Sold Items</h4>
+        <h4 className="progress-bar-title">Most Booked Rooms</h4>
       </div>
       <div className="progress-bar-list">
         {data?.map((progressbar) => {

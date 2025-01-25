@@ -7,10 +7,11 @@ import MoonIcon from "./assets/icons/moon.svg";
 import SunIcon from "./assets/icons/sun.svg";
 import BaseLayout from "./layout/BaseLayout";
 import { Dashboard, PageNotFound } from "./screens";
+import Statistics from "./screens/statistics/StatisticsScreen";
+import Login from "./screens/login/login";
 
 function App() {
-  const { theme, toggleTheme } = useContext(ThemeContext);
-
+  const { theme, toggleTheme } = useContext(ThemeContext); 
   // adding dark-mode class if the dark mode is set on to the body tag
   useEffect(() => {
     if (theme === DARK_THEME) {
@@ -24,8 +25,11 @@ function App() {
     <>
       <Router>
         <Routes>
+   
           <Route element={<BaseLayout />}>
-            <Route path="/" element={<Dashboard />} />
+          <Route path="/" element={<Login />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/statistics" element={<Statistics />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         </Routes>

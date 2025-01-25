@@ -19,10 +19,13 @@ import { Link } from "react-router-dom";
 import "./Sidebar.scss";
 import { SidebarContext } from "../../context/SidebarContext";
 
+
 const Sidebar = () => {
   const { theme } = useContext(ThemeContext);
   const { isSidebarOpen, closeSidebar } = useContext(SidebarContext);
   const navbarRef = useRef(null);
+  const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
+
 
   // closing the navbar when clicked outside the sidebar area
   const handleClickOutside = (event) => {
@@ -33,6 +36,11 @@ const Sidebar = () => {
     ) {
       closeSidebar();
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("isAuthenticated"); // Remove authentication status from localStorage
+    window.location.href = "/"; // Redirect to login page
   };
 
   useEffect(() => {
@@ -50,7 +58,7 @@ const Sidebar = () => {
       <div className="sidebar-top">
         <div className="sidebar-brand">
           <img src={theme === LIGHT_THEME ? LogoBlue : LogoWhite} alt="" />
-          <span className="sidebar-brand-text">tabernam.</span>
+          <span className="sidebar-brand-text">MOTEL MNGMT</span>
         </div>
         <button className="sidebar-close-btn" onClick={closeSidebar}>
           <MdOutlineClose size={24} />
@@ -59,39 +67,47 @@ const Sidebar = () => {
       <div className="sidebar-body">
         <div className="sidebar-menu">
           <ul className="menu-list">
-            <li className="menu-item">
-              <Link to="/" className="menu-link active">
+          {!isAuthenticated ? (
+          <li className="menu-item">
+              <Link to="/" className="menu-link">
                 <span className="menu-link-icon">
                   <MdOutlineGridView size={18} />
                 </span>
-                <span className="menu-link-text">Dashboard</span>
+                <span className="menu-link-text">Login</span>
               </Link>
             </li>
-            <li className="menu-item">
-              <Link to="/" className="menu-link">
-                <span className="menu-link-icon">
-                  <MdOutlineBarChart size={20} />
-                </span>
-                <span className="menu-link-text">Statistics</span>
-              </Link>
-            </li>
-            <li className="menu-item">
-              <Link to="/" className="menu-link">
-                <span className="menu-link-icon">
-                  <MdOutlineAttachMoney size={20} />
-                </span>
-                <span className="menu-link-text">Payment</span>
-              </Link>
-            </li>
-            <li className="menu-item">
-              <Link to="/" className="menu-link">
-                <span className="menu-link-icon">
-                  <MdOutlineCurrencyExchange size={18} />
-                </span>
-                <span className="menu-link-text">Transactions</span>
-              </Link>
-            </li>
-            <li className="menu-item">
+             ) : (
+            <><li className="menu-item">
+                  <Link to="/dashboard" className="menu-link" active>
+                    <span className="menu-link-icon">
+                      <MdOutlineGridView size={18} />
+                    </span>
+                    <span className="menu-link-text">Dashboard</span>
+                  </Link>
+                </li><li className="menu-item">
+                    <Link to="/statistics" className="menu-link">
+                      <span className="menu-link-icon">
+                        <MdOutlineBarChart size={20} />
+                      </span>
+                      <span className="menu-link-text">User Managment</span>
+                    </Link>
+                  </li><li className="menu-item">
+                    <Link to="/dashboard" className="menu-link">
+                      <span className="menu-link-icon">
+                        <MdOutlineAttachMoney size={20} />
+                      </span>
+                      <span className="menu-link-text">Motel Management</span>
+                    </Link>
+                  </li><li className="menu-item">
+                    <Link to="/dashboard" className="menu-link">
+                      <span className="menu-link-icon">
+                        <MdOutlineCurrencyExchange size={18} />
+                      </span>
+                      <span className="menu-link-text">Book a Room</span>
+                    </Link>
+                  </li></>
+              )}
+{/*             <li className="menu-item">
               <Link to="/" className="menu-link">
                 <span className="menu-link-icon">
                   <MdOutlineShoppingBag size={20} />
@@ -114,28 +130,30 @@ const Sidebar = () => {
                 </span>
                 <span className="menu-link-text">Messages</span>
               </Link>
-            </li>
+            </li> */}
           </ul>
         </div>
 
         <div className="sidebar-menu sidebar-menu2">
           <ul className="menu-list">
-            <li className="menu-item">
+            {/* <li className="menu-item">
               <Link to="/" className="menu-link">
                 <span className="menu-link-icon">
                   <MdOutlineSettings size={20} />
                 </span>
                 <span className="menu-link-text">Settings</span>
               </Link>
-            </li>
+            </li> */}
+{isAuthenticated ? (
             <li className="menu-item">
-              <Link to="/" className="menu-link">
+              <Link to="/" className="menu-link" onClick={handleLogout}>
                 <span className="menu-link-icon">
                   <MdOutlineLogout size={20} />
                 </span>
                 <span className="menu-link-text">Logout</span>
               </Link>
             </li>
+):(<></>)}
           </ul>
         </div>
       </div>
