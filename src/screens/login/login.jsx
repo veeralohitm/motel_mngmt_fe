@@ -11,8 +11,8 @@ const Login = ({ setIsAuthenticated }) => {
     if (username === "admin" && password === "password") { // Simulated login validation
       localStorage.setItem("isAuthenticated", "true"); // Store authentication status in localStorage
       setError(null);
-      //navigate("/dashboard"); //
-      window.location.href = "/dashboard";
+      navigate("/dashboard"); //
+      //window.location.href = "/dashboard";
     } else {
       setError("Invalid username or password");
     }

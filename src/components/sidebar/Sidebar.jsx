@@ -18,6 +18,7 @@ import {
 import { Link } from "react-router-dom";
 import "./Sidebar.scss";
 import { SidebarContext } from "../../context/SidebarContext";
+import { useNavigate } from "react-router-dom";
 
 
 const Sidebar = () => {
@@ -25,7 +26,7 @@ const Sidebar = () => {
   const { isSidebarOpen, closeSidebar } = useContext(SidebarContext);
   const navbarRef = useRef(null);
   const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
-
+  const navigate = useNavigate();
 
   // closing the navbar when clicked outside the sidebar area
   const handleClickOutside = (event) => {
@@ -40,7 +41,8 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("isAuthenticated"); // Remove authentication status from localStorage
-    window.location.href = "/"; // Redirect to login page
+    //window.location.href = "/"; // Redirect to login page
+    navigate("/"); 
   };
 
   useEffect(() => {
