@@ -60,7 +60,7 @@ const Sidebar = () => {
       <div className="sidebar-top">
         <div className="sidebar-brand">
           <img src={theme === LIGHT_THEME ? LogoBlue : LogoWhite} alt="" />
-          <span className="sidebar-brand-text">MOTEL MNGMT</span>
+          <span className="sidebar-brand-text">StudioMate</span>
         </div>
         <button className="sidebar-close-btn" onClick={closeSidebar}>
           <MdOutlineClose size={24} />
@@ -87,27 +87,37 @@ const Sidebar = () => {
                     <span className="menu-link-text">Dashboard</span>
                   </Link>
                 </li><li className="menu-item">
-                    <Link to="/statistics" className="menu-link">
+                    <Link to="/usermngmt" className="menu-link">
                       <span className="menu-link-icon">
                         <MdOutlineBarChart size={20} />
                       </span>
                       <span className="menu-link-text">User Managment</span>
                     </Link>
                   </li><li className="menu-item">
-                    <Link to="/dashboard" className="menu-link">
+                    <Link to="/motelmngmt" className="menu-link">
                       <span className="menu-link-icon">
                         <MdOutlineAttachMoney size={20} />
                       </span>
                       <span className="menu-link-text">Motel Management</span>
                     </Link>
                   </li><li className="menu-item">
-                    <Link to="/dashboard" className="menu-link">
+                    <Link to="/reserve" className="menu-link">
                       <span className="menu-link-icon">
                         <MdOutlineCurrencyExchange size={18} />
                       </span>
-                      <span className="menu-link-text">Book a Room</span>
+                      <span className="menu-link-text">Reserve a Room</span>
                     </Link>
-                  </li></>
+                  </li>
+                  <li className="menu-item">
+              <Link to="/dashboard" className="menu-link">
+                <span className="menu-link-icon">
+                  <MdOutlineShoppingBag size={20} />
+                </span>
+                <span className="menu-link-text">Guest Folio</span>
+              </Link>
+            </li>
+                  
+                  </>
               )}
 {/*             <li className="menu-item">
               <Link to="/" className="menu-link">

@@ -9,6 +9,10 @@ import BaseLayout from "./layout/BaseLayout";
 import { Dashboard, PageNotFound } from "./screens";
 import Statistics from "./screens/statistics/StatisticsScreen";
 import Login from "./screens/login/login";
+import Reserve from "./screens/reserveroom/reserve";
+import MotelManagement from "./screens/motelmanagement/motelmanagement";
+import UserManagement from "./screens/usermanagement/usermanagement";
+import GuestFolio from "./screens/guestfolio/guestfolio";
 
 function App() {
   const { theme, toggleTheme } = useContext(ThemeContext); 
@@ -30,6 +34,10 @@ function App() {
           <Route path="/" element={<Login />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/statistics" element={<Statistics />} />
+            <Route path="/reserve" element={<Reserve />} />
+            <Route path="/guestfolio" element={<GuestFolio />} />
+            <Route path="/motelmngmt" element={<MotelManagement />} />
+            <Route path="/usermngmt" element={<UserManagement />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         </Routes>
