@@ -27,7 +27,7 @@ const Sidebar = () => {
   const navbarRef = useRef(null);
   const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
   const navigate = useNavigate();
-
+  const username =  localStorage.getItem("username");
   // closing the navbar when clicked outside the sidebar area
   const handleClickOutside = (event) => {
     if (
@@ -79,7 +79,16 @@ const Sidebar = () => {
               </Link>
             </li>
              ) : (
-            <><li className="menu-item">
+            <>
+              <li className="menu-item">
+                  <Link className="menu-link">
+                    <span className="menu-link-icon">
+                      <MdOutlineGridView size={18} />
+                    </span>
+                    <span className="menu-link-text">Hi , {username}!</span>
+                  </Link>
+                </li>
+            <li className="menu-item">
                   <Link to="/dashboard" className="menu-link" active>
                     <span className="menu-link-icon">
                       <MdOutlineGridView size={18} />

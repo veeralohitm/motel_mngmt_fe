@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+const BASE_URL = "http://localhost:3000/"
+//const BASE_URL = "https://hotel-app-bk.onrender.com"
+const MOTEL_API_URL = `${BASE_URL}motels`;
+
 const MotelManagement = () => {
   const [motels, setMotels] = useState([]);
   const [roomTypes, setRoomTypes] = useState(["Single", "Double", "Suite"]);
@@ -9,14 +13,17 @@ const MotelManagement = () => {
   const [newRoomType, setNewRoomType] = useState("");
   const [newMotel, setNewMotel] = useState({
     name: "",
-    city: "",
-    rooms: []
+    location: "",
+    rooms: [],
   });
 
   const handleAddRoom = () => {
     setNewMotel((prev) => ({
       ...prev,
-      rooms: [...prev.rooms, { type: "", count: 0 }],
+      rooms: [
+        ...prev.rooms,
+        { type: "", numberOfRooms: 0, startNumber: 0, endNumber: 0 },
+      ],
     }));
   };
 
@@ -29,8 +36,23 @@ const MotelManagement = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
+
+    // Validate room data
+    for (const room of newMotel.rooms) {
+      const { startNumber, endNumber, numberOfRooms } = room;
+      const rangeCount = endNumber - startNumber + 1;
+
+      if (numberOfRooms !== rangeCount) {
+        alert(
+          `Room type ${room.type} has mismatch between number of rooms and numbering range.`
+        );
+        return;
+      }
+    }
+
+    // Add motel to the list
     setMotels([...motels, newMotel]);
-    setNewMotel({ name: "", city: "", rooms: [] });
+    setNewMotel({ name: "", location: "", rooms: [] });
     setShowPopup(false);
   };
 
@@ -61,7 +83,7 @@ const MotelManagement = () => {
         <thead>
           <tr>
             <th>Motel Name</th>
-            <th>City</th>
+            <th>Location</th>
             <th>Room Details</th>
           </tr>
         </thead>
@@ -69,11 +91,12 @@ const MotelManagement = () => {
           {motels.map((motel, index) => (
             <tr key={index}>
               <td>{motel.name}</td>
-              <td>{motel.city}</td>
+              <td>{motel.location}</td>
               <td>
                 {motel.rooms.map((room, i) => (
                   <div key={i}>
-                    {room.type}: {room.count} rooms
+                    {room.type}: {room.numberOfRooms} rooms (
+                    {room.startNumber} - {room.endNumber})
                   </div>
                 ))}
               </td>
@@ -109,13 +132,13 @@ const MotelManagement = () => {
                     />
                   </div>
                   <div className="mb-3">
-                    <label className="form-label">City Name</label>
+                    <label className="form-label">Location</label>
                     <input
                       type="text"
                       className="form-control"
-                      value={newMotel.city}
+                      value={newMotel.location}
                       onChange={(e) =>
-                        setNewMotel({ ...newMotel, city: e.target.value })
+                        setNewMotel({ ...newMotel, location: e.target.value })
                       }
                       required
                     />
@@ -123,32 +146,68 @@ const MotelManagement = () => {
 
                   <h6>Room Details</h6>
                   {newMotel.rooms.map((room, index) => (
-                    <div key={index} className="mb-3 d-flex align-items-center">
-                      <select
-                        className="form-select me-2"
-                        value={room.type}
-                        onChange={(e) =>
-                          handleRoomChange(index, "type", e.target.value)
-                        }
-                        required
-                      >
-                        <option value="">Select Room Type</option>
-                        {roomTypes.map((type, i) => (
-                          <option key={i} value={type}>
-                            {type}
-                          </option>
-                        ))}
-                      </select>
-                      <input
-                        type="number"
-                        className="form-control me-2"
-                        placeholder="Number of Rooms"
-                        value={room.count}
-                        onChange={(e) =>
-                          handleRoomChange(index, "count", e.target.value)
-                        }
-                        required
-                      />
+                    <div key={index} className="mb-3">
+                      <div className="d-flex align-items-center">
+                        <select
+                          className="form-select me-2"
+                          value={room.type}
+                          onChange={(e) =>
+                            handleRoomChange(index, "type", e.target.value)
+                          }
+                          required
+                        >
+                          <option value="">Select Room Type</option>
+                          {roomTypes.map((type, i) => (
+                            <option key={i} value={type}>
+                              {type}
+                            </option>
+                          ))}
+                        </select>
+                        <input
+                          type="number"
+                          className="form-control me-2"
+                          placeholder="Number of Rooms"
+                          value={room.numberOfRooms}
+                          onChange={(e) =>
+                            handleRoomChange(
+                              index,
+                              "numberOfRooms",
+                              parseInt(e.target.value) || 0
+                            )
+                          }
+                          required
+                        />
+                      </div>
+                      <div className="d-flex align-items-center mt-2">
+                        <input
+                          type="number"
+                          className="form-control me-2"
+                          placeholder="Start Number"
+                          value={room.startNumber}
+                          onChange={(e) =>
+                            handleRoomChange(
+                              index,
+                              "startNumber",
+                              parseInt(e.target.value) || 0
+                            )
+                          }
+                          required
+                        />
+                        <input
+                          type="number"
+                          className="form-control"
+                          placeholder="End Number"
+                          value={room.endNumber}
+                          onChange={(e) =>
+                            handleRoomChange(
+                              index,
+                              "endNumber",
+                              parseInt(e.target.value) || 0
+                            )
+                          }
+                          required
+                        />
+                      </div>
                     </div>
                   ))}
                   <button
