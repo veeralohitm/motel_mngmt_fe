@@ -25,7 +25,13 @@
     outline: 1px solid rgba(0, 0, 0, 0.02);
     outline-offset: -1px;
   }
-
+  .menu-link {
+    text-decoration: none;
+  }
+  .menu-link.active {
+    background-color: #f0f0f0;
+    font-weight: bold;
+  }
   // toggling this class helps to hide/unhide the sidebar
   &.sidebar-show{
     @media(max-width: 768px){

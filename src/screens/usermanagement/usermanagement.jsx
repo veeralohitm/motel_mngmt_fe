@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Swal from 'sweetalert2'
 
 //const BASE_URL = "http://localhost:3000/"
 const BASE_URL = "https://hotel-app-bk.onrender.com/"
@@ -45,13 +46,23 @@ const UserManagement = () => {
   });
 
   const handleDelete = async (userId) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
-      try {
+    const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!"
+      });
+      if (result.isConfirmed) {
+        try {
         await axios.delete(`${API_URL}/${userId}`);
+        Swal.fire("Deleted!", "The user has been deleted.", "success");
         setUsers(users.filter(user => user.user_id !== userId)); // Update UI after deletion
       } catch (error) {
         console.error("Error deleting user:", error);
-        alert("Failed to delete user.");
+        Swal.fire("Error!", error.response.data.error, "error");
       }
     }
   };
@@ -83,7 +94,22 @@ const UserManagement = () => {
     //  await axios.put(`${API_URL}/${users[editingUser].id}`, newUser);
     //} else {
     //console.log(newUser)
+    try {
     await axios.post(API_URL, newUser);
+    Swal.fire({
+        title: 'Success!',
+        text: 'User created successfully.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      });}
+      catch (error) {
+        console.error("Error creating user:", error);
+        Swal.fire({
+          title: 'Error!',
+          text: error.response.data.error,
+          icon: 'error',
+          confirmButtonText: 'Retry'
+      });}
     //}
     setUsers((await axios.get(API_URL)).data);
     setNewUser({
@@ -106,7 +132,7 @@ const UserManagement = () => {
       enabled: true,
     });
    
-    //setShowPopup(false);
+     setShowPopup(false);
     //setEditPopup(false);
     //setEditingUser(null);
   };
