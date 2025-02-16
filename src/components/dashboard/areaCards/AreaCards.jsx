@@ -8,7 +8,7 @@ const AreaCards = () => {
         colors={["#e4e8ef", "#475be8"]}
         percentFillValue={80}
         cardInfo={{
-          title: "Todays Sales",
+          title: "Sales",
           value: "$20.4K",
           text: "We have booked 120 rooms.",
         }}
@@ -17,7 +17,7 @@ const AreaCards = () => {
         colors={["#e4e8ef", "#4ce13f"]}
         percentFillValue={50}
         cardInfo={{
-          title: "Todays Revenue",
+          title: "Revenue",
           value: "$8.2K",
           text: "Available to payout",
         }}

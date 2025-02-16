@@ -46,6 +46,7 @@ const MotelManagement = () => {
       const response = await axios.get(ROOMTYPE_API_URL);
       setRoomTypes(response.data);
       setAvailableRoomTypes(response.data);
+      console.log(response)
     } catch (error) {
       console.error("Error fetching room types:", error);
     }

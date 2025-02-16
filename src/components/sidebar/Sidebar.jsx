@@ -12,6 +12,15 @@ import {
   MdOutlineGridView,
   MdOutlineLogout,
   MdOutlineShoppingBag,
+  MdEmail,
+  MdOutlineCleaningServices,
+  MdHomeWork,
+  MdPeopleAlt,
+  MdEqualizer,
+  MdContentPaste,
+  MdOutlineDescription,
+  MdEngineering
+
 } from "react-icons/md";
 import { SidebarContext } from "../../context/SidebarContext";
 import { useNavigate } from "react-router-dom";
@@ -76,7 +85,7 @@ const Sidebar = () => {
                 <li className="menu-item">
                   <NavLink to="/dashboard" className="menu-link" activeClassName="active">
                     <span className="menu-link-icon">
-                      <MdOutlineGridView size={18} />
+                      <MdEqualizer size={18} />
                     </span>
                     <span className="menu-link-text">Dashboard</span>
                   </NavLink>
@@ -84,7 +93,7 @@ const Sidebar = () => {
                 <li className="menu-item">
                   <NavLink to="/usermngmt" className="menu-link" activeClassName="active">
                     <span className="menu-link-icon">
-                      <MdOutlineBarChart size={20} />
+                      <MdPeopleAlt size={20} />
                     </span>
                     <span className="menu-link-text">User Management</span>
                   </NavLink>
@@ -92,7 +101,7 @@ const Sidebar = () => {
                 <li className="menu-item">
                   <NavLink to="/motelmngmt" className="menu-link" activeClassName="active">
                     <span className="menu-link-icon">
-                      <MdOutlineAttachMoney size={20} />
+                      <MdHomeWork size={20} />
                     </span>
                     <span className="menu-link-text">Motel Management</span>
                   </NavLink>
@@ -111,6 +120,46 @@ const Sidebar = () => {
                       <MdOutlineShoppingBag size={20} />
                     </span>
                     <span className="menu-link-text">Guest Folio</span>
+                  </NavLink>
+                </li>
+                <li className="menu-item">
+                  <NavLink to="/housekeeping" className="menu-link" activeClassName="active">
+                    <span className="menu-link-icon">
+                      <MdOutlineCleaningServices size={20} />
+                    </span>
+                    <span className="menu-link-text">House Keeping</span>
+                  </NavLink>
+                </li>
+                <li className="menu-item">
+                  <NavLink to="/journal" className="menu-link" activeClassName="active">
+                    <span className="menu-link-icon">
+                      <MdContentPaste size={20} />
+                    </span>
+                    <span className="menu-link-text">Journal</span>
+                  </NavLink>
+                </li>
+                <li className="menu-item">
+                  <NavLink to="/maintenance" className="menu-link" activeClassName="active">
+                    <span className="menu-link-icon">
+                      <MdEngineering size={20} />
+                    </span>
+                    <span className="menu-link-text">Maintenance</span>
+                  </NavLink>
+                </li>
+                <li className="menu-item">
+                  <NavLink to="/reports" className="menu-link" activeClassName="active">
+                    <span className="menu-link-icon">
+                      <MdOutlineDescription size={20} />
+                    </span>
+                    <span className="menu-link-text">Reports</span>
+                  </NavLink>
+                </li>
+                <li className="menu-item">
+                  <NavLink to="/mail" className="menu-link" activeClassName="active">
+                    <span className="menu-link-icon">
+                      <MdEmail size={20} />
+                    </span>
+                    <span className="menu-link-text">Mail / Chat</span>
                   </NavLink>
                 </li>
               </>
