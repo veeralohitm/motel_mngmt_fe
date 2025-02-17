@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { ThemeContext } from "../../context/ThemeContext";
 import { LIGHT_THEME } from "../../constants/themeConstants";
@@ -19,16 +19,19 @@ import {
   MdEqualizer,
   MdContentPaste,
   MdOutlineDescription,
-  MdEngineering
+  MdEngineering,
+  MdChevronLeft,
+  MdChevronRight
 
 } from "react-icons/md";
 import { SidebarContext } from "../../context/SidebarContext";
 import { useNavigate } from "react-router-dom";
 import "./Sidebar.scss";
 
-const Sidebar = () => {
+const Sidebar = ({ isCollapsed, setIsCollapsed }) =>  {
   const { theme } = useContext(ThemeContext);
-  const { isSidebarOpen, closeSidebar } = useContext(SidebarContext);
+  const { isSidebarOpen, toggleSidebar, closeSidebar } = useContext(SidebarContext);
+  //const [isCollapsed, setIsCollapsed] = useState(false);
   const navbarRef = useRef(null);
   const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
   const navigate = useNavigate();
@@ -57,12 +60,15 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <nav className={`sidebar ${isSidebarOpen ? "sidebar-show" : ""}`} ref={navbarRef}>
+    <nav className={`sidebar ${isSidebarOpen ? "sidebar-show" : ""} ${isCollapsed ? "sidebar-collapsed" : ""}`} ref={navbarRef}>
       <div className="sidebar-top">
         <div className="sidebar-brand">
           <img src={theme === LIGHT_THEME ? LogoBlue : LogoWhite} alt="logo" />
           <span className="sidebar-brand-text">StudioMate</span>
         </div>
+        <button className="sidebar-toggle-btn" onClick={() => setIsCollapsed(!isCollapsed)}>
+      {isCollapsed ? <MdChevronRight size={24} /> : <MdChevronLeft size={24} />}
+    </button>
         <button className="sidebar-close-btn" onClick={closeSidebar}>
           <MdOutlineClose size={24} />
         </button>

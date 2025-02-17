@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
+import { BASE_URL } from "../../links";
 
-//const BASE_URL = "http://localhost:3000/";
-const BASE_URL = "https://hotel-app-bk.onrender.com/"
 const LOGIN_API_URL = `${BASE_URL}login`;
 const CHECK_HISTORY_URL = `${BASE_URL}check-user-history`;
 const RESET_PASSWORD_URL = `${BASE_URL}reset-password`;

@@ -161,6 +161,10 @@ ul {
   }
 }
 
+.content-wrapper.collapsed {
+  margin-left: 60px; /* Adjust based on collapsed sidebar width */
+}
+
 // content
 .content-area {
   & > section {

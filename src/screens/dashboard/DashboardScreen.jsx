@@ -8,7 +8,7 @@ const Dashboard = () => {
   return (
     <div className="content-area">
       <div>
-      <AreaTop/>
+        <AreaTop />
       </div>
       <div className="d-flex gap-2 mb-4">
         <button className={`btn ${activeTab === "current" ? "btn-primary" : "btn-outline-primary"}`} onClick={() => setActiveTab("current")}>Current</button>
@@ -18,15 +18,15 @@ const Dashboard = () => {
 
       {activeTab === "current" && (
         <div>
-          <AreaCards />
-          <AreaCharts />
+          <AreaCards metrics={["Total Sales", "Today Revenue", "Rooms Occupancy", "Maintenance Status", "Mails", "Notes"]} />
+          <AreaCharts metrics={["Today Revenue", "Rooms Occupancy"]} />
         </div>
       )}
 
       {activeTab === "previous" && (
         <div>
-          <AreaCards />
-          <AreaCharts />
+          <AreaCards metrics={["Total Sales", "Today Revenue", "Rooms Occupancy", "Maintenance Status", "No. of Checkouts (Departure)"]} />
+          <AreaCharts metrics={["Today Revenue", "Rooms Occupancy"]} />
         </div>
       )}
 
@@ -43,8 +43,9 @@ const Dashboard = () => {
               </button>
             ))}
           </div>
-          <AreaCards filter={overallFilter} />
-          <AreaCharts filter={overallFilter} />
+          <AreaCards filter={overallFilter} metrics={["Month-wise Revenue", "Type of Room Bookings", "Stay Overs", "Booking-wise Rooms", "Reserved Rooms (Arrival)"]} />
+          <AreaCharts filter={overallFilter} metrics={["Up to One-Week Occupancy Status", "Month-wise Revenue"]} />
+          <AreaTable filter={overallFilter} metrics={["Booking-wise Rooms", "Stay Overs"]} />
         </div>
       )}
     </div>

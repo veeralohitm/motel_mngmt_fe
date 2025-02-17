@@ -1,93 +1,79 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { BASE_URL } from "../../links";
 
 const GuestFolio = () => {
-  // Sample guest data
-  const [guests, setGuests] = useState([
-    {
-      id: 1,
-      guestName: 'John Doe',
-      roomNo: '101',
-      checkIn: '2025-01-20',
-      checkOut: '2025-01-25',
-      comments: '',
-    },
-    {
-      id: 2,
-      guestName: 'Jane Smith',
-      roomNo: '102',
-      checkIn: '2025-01-22',
-      checkOut: '2025-01-30',
-      comments: '',
-    },
-    // Add more guests here
-  ]);
+  const [guests, setGuests] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const [selectedGuest, setSelectedGuest] = useState(null);
-  const [newComment, setNewComment] = useState('');
+  useEffect(() => {
+    fetch('https://api.example.com/guestfolio') // Replace with actual API URL
+      .then((response) => response.json())
+      .then((data) => {
+        setGuests(data.slice(0, 10)); // Show only 10 rows
+        setLoading(false);
+      })
+      .catch((error) => console.error('Error fetching guest data:', error));
+  }, []);
 
-  const handleViewData = (guest) => {
-    setSelectedGuest(guest);
+  const handleCheckout = (id) => {
+    console.log(`Checking out guest with ID: ${id}`);
+    // Add logic for checking out a guest
   };
 
-  const handleAddComment = (id) => {
-    setGuests(guests.map((guest) =>
-      guest.id === id ? { ...guest, comments: newComment } : guest
-    ));
-    setNewComment('');
+  const handleRebook = (id) => {
+    console.log(`Rebooking guest with ID: ${id}`);
+    // Add logic for rebooking a guest
   };
 
   return (
-    <div>
-      <h1>Guest Folio</h1>
-      
-      {/* Guest List */}
-      <table>
-        <thead>
-          <tr>
-            <th>Guest Name</th>
-            <th>Room No</th>
-            <th>Check-in Date</th>
-            <th>Check-out Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {guests.map((guest) => (
-            <tr key={guest.id}>
-              <td>{guest.guestName}</td>
-              <td>{guest.roomNo}</td>
-              <td>{guest.checkIn}</td>
-              <td>{guest.checkOut}</td>
-              <td>
-                <button onClick={() => handleViewData(guest)}>View Data</button>
-                <button onClick={() => handleAddComment(guest.id)}>Add Comment</button>
-              </td>
+    <div className="container mt-4">
+      <h1 className="mb-4">Guest Folio</h1>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <table className="table table-striped table-bordered">
+          <thead className="table-dark">
+            <tr>
+              <th>Full Name</th>
+              <th>Room Number</th>
+              <th>Folio Number</th>
+              <th>Check-in</th>
+              <th>Departure Date</th>
+              <th>Payment Type</th>
+              <th>Reference</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {/* Guest Details Modal */}
-      {selectedGuest && (
-        <div className="modal">
-          <h2>{selectedGuest.guestName}'s Details</h2>
-          <p>Room No: {selectedGuest.roomNo}</p>
-          <p>Check-in Date: {selectedGuest.checkIn}</p>
-          <p>Check-out Date: {selectedGuest.checkOut}</p>
-          <p>Comments: {selectedGuest.comments || 'No comments yet.'}</p>
-        </div>
+          </thead>
+          <tbody>
+            {guests.map((guest) => (
+              <tr key={guest.id}>
+                <td>{guest.fullName}</td>
+                <td>{guest.roomNumber}</td>
+                <td>{guest.folioNumber}</td>
+                <td>{guest.checkIn}</td>
+                <td>{guest.departureDate}</td>
+                <td>{guest.paymentType}</td>
+                <td>{guest.reference}</td>
+                <td>
+                  <button
+                    className="btn btn-success btn-sm me-2"
+                    onClick={() => handleRebook(guest.id)}
+                  >
+                    Rebook
+                  </button>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => handleCheckout(guest.id)}
+                  >
+                    Checkout
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
-
-      {/* Add Comment */}
-      <div>
-        <h3>Add a Comment</h3>
-        <textarea
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          placeholder="Write a comment"
-        />
-        <button onClick={() => handleAddComment(selectedGuest?.id)}>Save Comment</button>
-      </div>
     </div>
   );
 };

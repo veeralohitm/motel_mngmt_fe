@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Tesseract from "tesseract.js";
+import { BASE_URL } from "../../links";
 
 
-//const BASE_URL = "http://localhost:3000/";
-const BASE_URL = "https://hotel-app-bk.onrender.com/"
 const MOTEL_API_URL = `${BASE_URL}motels`;
 const ROOMS_API_URL = `${BASE_URL}rooms`;
 const ROOMTYPE_API_URL = `${BASE_URL}roomtypes`;

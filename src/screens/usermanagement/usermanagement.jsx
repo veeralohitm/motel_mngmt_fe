@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+import { BASE_URL } from "../../links";
 
-//const BASE_URL = "http://localhost:3000/"
-const BASE_URL = "https://hotel-app-bk.onrender.com/"
+
 const API_URL = `${BASE_URL}users`;
 const MOTEL_API_URL = `${BASE_URL}motels`;
 
