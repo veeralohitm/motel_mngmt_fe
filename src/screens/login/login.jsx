@@ -61,6 +61,7 @@ const Login = ({ setIsAuthenticated }) => {
         Swal.fire("Welcome!", username, "success");
         localStorage.setItem("isAuthenticated", "true");
         localStorage.setItem("username", data.user.username);
+        localStorage.setItem("role", data.user.role);
         navigate("/dashboard");
       } else {
         setError(data.message || "Login failed. Please try again.");

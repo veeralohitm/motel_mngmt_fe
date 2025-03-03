@@ -21,7 +21,9 @@ import {
   MdOutlineDescription,
   MdEngineering,
   MdChevronLeft,
-  MdChevronRight
+  MdChevronRight,
+  MdLogin,
+  MdOutlineBedroomChild
 
 } from "react-icons/md";
 import { SidebarContext } from "../../context/SidebarContext";
@@ -80,7 +82,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) =>  {
               <li className="menu-item">
                 <NavLink to="/" className="menu-link">
                   <span className="menu-link-icon">
-                    <MdOutlineGridView size={18} />
+                    <MdLogin size={18} />
                   </span>
                   <span className="menu-link-text">Login</span>
                 </NavLink>
@@ -115,7 +117,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) =>  {
                 <li className="menu-item">
                   <NavLink to="/reserve" className="menu-link" activeClassName="active">
                     <span className="menu-link-icon">
-                      <MdOutlineCurrencyExchange size={18} />
+                      <MdOutlineBedroomChild size={18} />
                     </span>
                     <span className="menu-link-text">Reserve a Room</span>
                   </NavLink>

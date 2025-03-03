@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Tesseract from "tesseract.js";
 import { BASE_URL } from "../../links";
+import BookingPopup from "./bookingpopup";
 
 
 const MOTEL_API_URL = `${BASE_URL}motels`;
@@ -9,6 +10,7 @@ const ROOMS_API_URL = `${BASE_URL}rooms`;
 const ROOMTYPE_API_URL = `${BASE_URL}roomtypes`;
 
 const Reserve = () => {
+  const [step, setStep] = useState(1);
   const [motels, setMotels] = useState([]);
   const [selectedMotel, setSelectedMotel] = useState("");
   const [roomTypes, setRoomTypes] = useState([]);
@@ -25,36 +27,11 @@ const Reserve = () => {
   const [nights, setNights] = useState(1);
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const roomsPerPage = 5;
 
-  const handleIdScan = (file) => {
-    // Simulating ID scan and extracting details
-    const scannedData = {
-      firstName: "John",
-      lastName: "Doe",
-      streetName: "123 Main St",
-      city: "New York",
-      state: "NY",
-      zipcode: "10001",
-      country: "USA",
-      phone: "123-456-7890",
-    };
-    setCustomerDetails(scannedData);
-  };
-  const handleNightsChange = (e) => {
-    setNights(Number(e.target.value));
-    if (checkInDate) {
-      const newCheckout = new Date(checkInDate);
-      newCheckout.setDate(newCheckout.getDate() + Number(e.target.value));
-      setCheckOutDate(newCheckout.toISOString().split("T")[0]);
-    }
-  };
 
-  const handleCheckInChange = (e) => {
-    setCheckInDate(e.target.value);
-    const newCheckout = new Date(e.target.value);
-    newCheckout.setDate(newCheckout.getDate() + nights);
-    setCheckOutDate(newCheckout.toISOString().split("T")[0]);
-  };
+
 
 
   useEffect(() => {
@@ -92,6 +69,17 @@ const Reserve = () => {
     } catch (error) {
       console.error("Error fetching rooms: ", error);
     }
+  };
+
+  const handleChange = (e, section) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [section]: {
+        ...prev[section],
+        [name]: type === "checkbox" ? checked : value,
+      },
+    }));
   };
 
   const handleMotelChange = (e) => {
@@ -156,7 +144,12 @@ const Reserve = () => {
   const handleBookRooms = () => {
     setShowPopup(true);
   };
+  const indexOfLastRoom = currentPage * roomsPerPage;
+  const indexOfFirstRoom = indexOfLastRoom - roomsPerPage;
+  const currentRooms = availableRooms.slice(indexOfFirstRoom, indexOfLastRoom);
+  const totalPages = Math.ceil(availableRooms.length / roomsPerPage);
 
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <div className="p-4">
       <h1 className="mb-4">Reserve a Room</h1>
@@ -180,6 +173,7 @@ const Reserve = () => {
           </select>
         </div>
       )}
+      <div class="row">
        <div className="mt-3 mb-3">
         <h4>Selected Rooms ({selectedRooms.length}):</h4>
         <ul>
@@ -193,6 +187,7 @@ const Reserve = () => {
           <button className="btn btn-success" onClick={handleBookRooms}>Book</button>
         )}
       </div>
+      </div>
       <table className="table table-bordered">
         <thead>
           <tr>
@@ -202,7 +197,7 @@ const Reserve = () => {
           </tr>
         </thead>
         <tbody>
-          {availableRooms.map((room) => (
+          {currentRooms.map((room) => (
             <tr key={room.room_id}>
               <td>{room.roomnumber}</td>
               <td>{room.roomtypename}</td>
@@ -211,10 +206,38 @@ const Reserve = () => {
               </td>
             </tr>
           ))}
+          
         </tbody>
       </table>
+      <nav>
+        <ul className="pagination">
+          <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+            <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)}>
+              Previous
+            </button>
+          </li>
+          {[...Array(totalPages)].map((_, index) => (
+            <li key={index} className={`page-item ${currentPage === index + 1 ? "active" : ""}`}>
+              <button className="page-link" onClick={() => setCurrentPage(index + 1)}>
+                {index + 1}
+              </button>
+            </li>
+          ))}
+          <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+            <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>
+              Next
+            </button>
+          </li>
+        </ul>
+      </nav>
      
-      {showPopup && (
+
+     <BookingPopup 
+        selectedRooms={selectedRooms}
+        showPopup={showPopup}
+        setShowPopup={setShowPopup}
+        />
+    {/*   {showPopup && (
         <div className="modal show d-block" tabIndex="-1">
           <div className="modal-dialog">
             <div className="modal-content">
@@ -225,10 +248,17 @@ const Reserve = () => {
               <div className="modal-body d-flex">
                 <div class="container">
                 <div class="row">
-                <p>You are booking: {selectedRooms.map((room) => room.roomnumber).join(", ")}</p>
+                <p>You are booking:</p>
+<ul>
+  {selectedRooms.map((room, index) => (
+    <li key={index}>
+      Room {room.roomnumber} - {room.roomtypename}
+    </li>
+  ))}
+</ul>
                   </div>
-<div class="row">
-          
+                  {step === 1 && (
+              <div class="row">
               <div className="w-50 pe-3">
                 <div className="mb-3">
                   <label className="form-label">Check-in Date</label>
@@ -300,15 +330,71 @@ const Reserve = () => {
                   <input type="text" className="form-control" value={customerDetails.phone || ""} readOnly />
                 </div>
               </div>
-              </div> </div></div>
+              </div> 
+               )}
+                {step === 2 && (
+              <div>
+                <h4>Rates</h4>
+                {selectedMotel && (
+        <div className="mb-3">
+          <label className="form-label">Select Room Type:</label>
+          <select className="form-select" value={formData.room.roomType} onChange={(e) => handleChange(e, "room")} >
+            {roomTypes.map((type) => (
+              <option key={type.roomtypename} value={type.roomtypename}>{type.roomtypename}</option>
+            ))}
+          </select>
+        </div>
+      )}
+                <select name="rateType" className="form-select mb-2" value={formData.room.rateType} onChange={(e) => handleChange(e, "room")}>
+                  <option value="weekday_rate">Weekday Rate</option>
+                  <option value="weekend_rate">Weekend Rate</option>
+                </select>
+                <h4>Taxes & Discounts</h4>
+                <div className="form-check">
+                  <input className="form-check-input" type="checkbox" name="taxExempt" checked={formData.billing.taxExempt} onChange={(e) => handleChange(e, "billing")} />
+                  <label className="form-check-label">Tax Exempt</label>
+                </div>
+                {!formData.billing.taxExempt && (
+                  <input name="taxRate" type="number" className="form-control mb-2" value={formData.billing.taxRate} onChange={(e) => handleChange(e, "billing")} />
+                )}
+                <div className="form-check">
+                  <input className="form-check-input" type="checkbox" name="discountApplied" checked={formData.billing.discountApplied} onChange={(e) => handleChange(e, "billing")} />
+                  <label className="form-check-label">Apply Discount</label>
+                </div>
+                {formData.billing.discountApplied && (
+                  <div>
+                    <select name="discountType" className="form-select mb-2" value={formData.billing.discountType} onChange={(e) => handleChange(e, "billing")}>
+                      <option value="Fixed Amount">Fixed Amount</option>
+                      <option value="Percentage">Percentage</option>
+                    </select>
+                    <input name="discountValue" type="number" className="form-control" value={formData.billing.discountValue} onChange={(e) => handleChange(e, "billing")} />
+                  </div>
+                )}
+              </div>
+            )}
+             {step === 3 && (
+              <div>
+                <h4>Payment</h4>
+                <select name="paymentType" className="form-select mb-2" value={formData.billing.paymentType} onChange={(e) => handleChange(e, "billing")}>
+                  <option value="Cash">Cash</option>
+                  <option value="Card">Card</option>
+                  <option value="Direct Billing">Direct Billing</option>
+                </select>
+                <h5>Total Amount: ${formData.billing.finalAmount}</h5>
+              </div>
+            )}
+              </div></div>
               <div className="modal-footer">
-              <button type="button" className="btn btn-primary">Submit</button>
+              {step > 1 && <button className="btn btn-secondary" onClick={() => setStep(step - 1)}>Back</button>}
+            {step < 3 && <button className="btn btn-primary" onClick={() => setStep(step + 1)}>Next</button>}
+            {step === 3 && <button className="btn btn-success" onClick={() => alert("Reservation Submitted!")}>Submit</button>}
                 <button type="button" className="btn btn-secondary" onClick={() => setShowPopup(false)}>Close</button>
               </div>
             </div>
           </div>
         </div>
-      )}
+      )} */}
+
     </div>
   );
 };
